@@ -4,32 +4,30 @@ import anime from "animejs";
 
 const Basics = () => {
   const animation = useRef(null);
+  const arr = [];
+  for (let i = 0; i < 70; i++) {
+    arr[i] = 0;
+  }
+  console.log(arr);
+
+  function handleAnimation() {
+    animation.current.play();
+  }
+
+  function Row() {
+    return arr
+      .slice(0, 14)
+      .map((_) => <div className={`${Styles.block} block`}></div>);
+  }
 
   useEffect(() => {
     animation.current = anime({
       targets: ".block",
-      translateX: function (el) {
-        return el.getAttribute("data-x");
-      },
-      translateY: function (el, i) {
-        return 50 + -50 * i;
-      },
-      scale: function (el, i, l) {
-        return l - i + 0.25;
-      },
-      rotate: function () {
-        return anime.random(-360, 360);
-      },
-      borderRadius: function () {
-        return ["50%", anime.random(10, 35) + "%"];
-      },
-      duration: function () {
-        return anime.random(1200, 1800);
-      },
-      delay: function () {
-        return anime.random(0, 400);
-      },
-      direction: "alternate",
+      scale: [
+        { value: 0.1, easing: "easeOutSine", duration: 600 },
+        { value: 1, easing: "easeInOutQuad", duration: 1200 },
+      ],
+      delay: anime.stagger(200, { grid: [5, 14], from: "center" }),
       loop: true,
     });
     return () => {
@@ -39,13 +37,15 @@ const Basics = () => {
 
   return (
     <div className={Styles.basics}>
-      <div className={`${Styles.block} block`} data-x="200"></div>
-      {/* <div className={`${Styles.block} block2`}></div> */}
-      <div className={`${Styles.block} block`} data-x="75"></div>
-      {/* <div className={`${Styles.block} block2`}></div> */}
-      <div className={`${Styles.block} block`} data-x="300"></div>
-      {/* <div className={`${Styles.block} block2`}></div> */}
-      {/* <button onClick={handleAnimation}>Stop/Play</button> */}
+      {arr.slice(0, 14).map((ele) => (
+        <div>
+          {arr.slice(0, 5).map((_) => (
+            <div className={`${Styles.block} block`}></div>
+          ))}
+        </div>
+      ))}
+
+      <button onClick={handleAnimation}>Stop/Play</button>
     </div>
   );
 };
