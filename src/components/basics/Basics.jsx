@@ -3,52 +3,49 @@ import Styles from "../../styles/basic/basic.module.scss";
 import anime from "animejs";
 
 const Basics = () => {
-  const [animationState, setAnimationState] = useState(false); //true means play
   const animation = useRef(null);
-  const animation2 = useRef(null);
-
-  const handleAnimation = () => {
-    if (animationState) {
-      animation.current.pause();
-      animation2.current.pause();
-    } else {
-      animation.current.play();
-      animation2.current.play();
-    }
-    setAnimationState((prev) => !prev);
-  };
 
   useEffect(() => {
     animation.current = anime({
       targets: ".block",
-      translateX: [0, 250],
+      translateX: function (el) {
+        return el.getAttribute("data-x");
+      },
+      translateY: function (el, i) {
+        return 50 + -50 * i;
+      },
+      scale: function (el, i, l) {
+        return l - i + 0.25;
+      },
+      rotate: function () {
+        return anime.random(-360, 360);
+      },
+      borderRadius: function () {
+        return ["50%", anime.random(10, 35) + "%"];
+      },
+      duration: function () {
+        return anime.random(1200, 1800);
+      },
+      delay: function () {
+        return anime.random(0, 400);
+      },
+      direction: "alternate",
       loop: true,
-      easing: "easeInOutSine",
-      autoplay: false,
-    });
-    animation2.current = anime({
-      targets: ".block2",
-      translateX: [0, 250],
-      loop: true,
-      direction: "reverse",
-      easing: "easeInOutSine",
-      autoplay: false,
     });
     return () => {
       animation.current = null;
-      animation2.current = null;
     };
   });
 
   return (
     <div className={Styles.basics}>
-      <div className={`${Styles.block} block`}></div>
-      <div className={`${Styles.block} block2`}></div>
-      <div className={`${Styles.block} block`}></div>
-      <div className={`${Styles.block} block2`}></div>
-      <div className={`${Styles.block} block`}></div>
-      <div className={`${Styles.block} block2`}></div>
-      <button onClick={handleAnimation}>Stop/Play</button>
+      <div className={`${Styles.block} block`} data-x="200"></div>
+      {/* <div className={`${Styles.block} block2`}></div> */}
+      <div className={`${Styles.block} block`} data-x="75"></div>
+      {/* <div className={`${Styles.block} block2`}></div> */}
+      <div className={`${Styles.block} block`} data-x="300"></div>
+      {/* <div className={`${Styles.block} block2`}></div> */}
+      {/* <button onClick={handleAnimation}>Stop/Play</button> */}
     </div>
   );
 };
