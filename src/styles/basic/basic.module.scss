@@ -1,0 +1,12 @@
+.basics {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .block {
+    width: 100px;
+    height: 100px;
+    background-color: red;
+  }
+}
